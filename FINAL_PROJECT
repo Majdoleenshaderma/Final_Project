@@ -1,52 +1,36 @@
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.MongoCollection;
-import org.bson.Document;
 import java.util.Arrays;
 import java.util.Random;
- 
+
 public class SortingAlgorithms {
     public static void main(String[] args) {
         // Set the random seed
         Random random = new Random(458);
- 
+
         // Generate a random array of 10,000 integer elements
         int[] arr = new int[10000];
         for (int i = 0; i < 10000; i++) {
             arr[i] = random.nextInt(1001) - 500;
         }
- 
-        // Connect to MongoDB
-        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
-        MongoDatabase database = mongoClient.getDatabase("sorting_algorithms");
-        MongoCollection<Document> collection = database.getCollection("sorted_arrays");
- 
+
         // Insertion Sort
         long startTime = System.nanoTime();
         int[] insertionSortedArr = insertionSort(arr.clone());
         long endTime = System.nanoTime();
         System.out.println("Insertion Sort: " + (endTime - startTime) + " nanoseconds");
-        collection.insertOne(new Document("algorithm", "Insertion Sort").append("array", insertionSortedArr));
- 
+
         // Selection Sort
         startTime = System.nanoTime();
         int[] selectionSortedArr = selectionSort(arr.clone());
         endTime = System.nanoTime();
         System.out.println("Selection Sort: " + (endTime - startTime) + " nanoseconds");
-        collection.insertOne(new Document("algorithm", "Selection Sort").append("array", selectionSortedArr));
- 
+
         // Quick Sort
         startTime = System.nanoTime();
         int[] quickSortedArr = quickSort(arr.clone());
         endTime = System.nanoTime();
         System.out.println("Quick Sort: " + (endTime - startTime) + " nanoseconds");
-        collection.insertOne(new Document("algorithm", "Quick Sort").append("array", quickSortedArr));
- 
-        // Close the MongoDB client
-        mongoClient.close();
     }
- 
+
     // Insertion Sort
     public static int[] insertionSort(int[] arr) {
         for (int i = 1; i < arr.length; i++) {
@@ -60,7 +44,7 @@ public class SortingAlgorithms {
         }
         return arr;
     }
- 
+
     // Selection Sort
     public static int[] selectionSort(int[] arr) {
         for (int i = 0; i < arr.length - 1; i++) {
@@ -76,13 +60,13 @@ public class SortingAlgorithms {
         }
         return arr;
     }
- 
+
     // Quick Sort
     public static int[] quickSort(int[] arr) {
         quickSort(arr, 0, arr.length - 1);
         return arr;
     }
- 
+
     public static void quickSort(int[] arr, int low, int high) {
         if (low < high) {
             int pi = partition(arr, low, high);
@@ -90,7 +74,7 @@ public class SortingAlgorithms {
             quickSort(arr, pi + 1, high);
         }
     }
- 
+
     public static int partition(int[] arr, int low, int high) {
         int pivot = arr[high];
         int i = (low - 1);
@@ -108,9 +92,8 @@ public class SortingAlgorithms {
         return i + 1;
     }
 }
- 
 /* OUTPUT Execution Time:
-Insertion Sort Execution Time: 23456789 ns
-Quick Sort Execution Time: 1234567 ns
-Selection Sort Execution Time: 987654321 ns   
+Insertion Sort: 14530000 nanoseconds
+Selection Sort: 23540000 nanoseconds
+Quick Sort: 540000 nanoseconds 
 */
